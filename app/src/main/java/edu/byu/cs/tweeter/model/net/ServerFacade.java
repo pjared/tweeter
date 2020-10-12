@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.byu.cs.tweeter.BuildConfig;
 import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.Status;
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.service.request.LoginRequest;
@@ -143,7 +144,7 @@ public class ServerFacade {
 
     public StatusResponse postStatus(StatusRequest request) {
         StatusResponse statResponse = new StatusResponse(request.getPoster(), new AuthToken());
-
+        //Find the user in the data base and then add the post to their (list of posts?)
         return statResponse;
     }
 
@@ -158,4 +159,49 @@ public class ServerFacade {
                 user8, user9, user10, user11, user12, user13, user14, user15, user16, user17, user18,
                 user19, user20);
     }
+
+    //Make a FollowerResponse & Request
+    //Request should also have a limit to load (copy and reformat Following)
+    /*public FollowingResponse getFollowers(FollowingRequest request) {
+
+        // Used in place of assert statements because Android does not support them
+        if(BuildConfig.DEBUG) {
+            if(request.getLimit() < 0) {
+                throw new AssertionError();
+            }
+
+            if(request.getFollower() == null) {
+                throw new AssertionError();
+            }
+        }
+
+        List<User> allFollowers = getDummyFollowing();
+        List<User> responseFollowees = new ArrayList<>(request.getLimit());
+
+        boolean hasMorePages = false;
+
+        if(request.getLimit() > 0) {
+            int followeesIndex = getFolloweesStartingIndex(request.getLastFollowee(), allFollowees);
+
+            for(int limitCounter = 0; followeesIndex < allFollowees.size() && limitCounter < request.getLimit(); followeesIndex++, limitCounter++) {
+                responseFollowees.add(allFollowees.get(followeesIndex));
+            }
+
+            hasMorePages = followeesIndex < allFollowees.size();
+        }
+
+        return new FollowingResponse(responseFollowees, hasMorePages);
+    }*/
+
+    List<User> getDummyFollowing() {
+        return Arrays.asList(user1, user2, user3, user4, user5, user6, user7,
+                user8, user9);
+    }
+
+    List<Status> getDummyStatus() {
+        //User should be following all these, and also see these statuses
+        return Arrays.asList(new Status(user1, "Hi"),new Status(user4, "Hi 2")
+                ,new Status(user5, "Hi 3"));
+    }
+
 }
