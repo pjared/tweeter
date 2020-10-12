@@ -6,19 +6,23 @@ import edu.byu.cs.tweeter.model.domain.User;
 public class StatusResponse extends Response {
 
     private User user;
-    //private AuthToken authToken;// need an authtoken to post a status? prob
+    private AuthToken authToken;
 
-    public RegisterResponse(String message) {
+    public StatusResponse(String message) {
         super(false, message);
     }
 
-    public RegisterResponse(User user) {
+    public StatusResponse(User user,  AuthToken authToken) {
         super(true, null);
         this.user = user;
+        this.authToken = authToken;
     }
 
     public User getUser() {
         return user;
     }
 
+    public AuthToken getAuthToken() {
+        return authToken;
+    }
 }

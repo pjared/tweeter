@@ -33,7 +33,9 @@ import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.request.FollowingRequest;
 import edu.byu.cs.tweeter.model.service.request.StatusRequest;
 import edu.byu.cs.tweeter.presenter.FollowingPresenter;
+import edu.byu.cs.tweeter.presenter.StatusPresenter;
 import edu.byu.cs.tweeter.view.LoginActivity;
+import edu.byu.cs.tweeter.view.asyncTasks.StatusTask;
 import edu.byu.cs.tweeter.view.util.ImageUtils;
 
 import static java.lang.Integer.MAX_VALUE;
@@ -41,7 +43,7 @@ import static java.lang.Integer.MAX_VALUE;
 /**
  * The main activity for the application. Contains tabs for feed, story, following, and followers.
  */
-public class MainActivity extends AppCompatActivity implements FollowingPresenter.View {
+public class MainActivity extends AppCompatActivity implements FollowingPresenter.View, StatusPresenter.View {
 
     public static final String CURRENT_USER_KEY = "CurrentUser";
     public static final String AUTH_TOKEN_KEY = "AuthTokenKey";
@@ -66,8 +68,7 @@ public class MainActivity extends AppCompatActivity implements FollowingPresente
 
         FloatingActionButton fab = findViewById(R.id.fab);
 
-        // We should use a Java 8 lambda function for the listener (and all other listeners), but
-        // they would be unfamiliar to many students who use this code.
+        StatusPresenter statPresenter = new StatusPresenter(this);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -93,14 +94,16 @@ public class MainActivity extends AppCompatActivity implements FollowingPresente
                     }
                 });
 
+
                 Button postStatus = popupView.findViewById(R.id.statusPostButton);
                 postStatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //Don't enable this button until there is text in the status
                         //setStatus(editTextStatus)
-                        StatusRequest  statRequest = new StatusRequest(user, "");
-                        StatusTask statTask = new StatusTask();
+                        StatusRequest statRequest = new StatusRequest(user, "");
+                        statPresenter.postStatus(statRequest);
+
                         Toast.makeText(MainActivity.this, "Posting...", Toast.LENGTH_SHORT).show();
                     }
                 });

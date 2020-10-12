@@ -1,15 +1,15 @@
 package edu.byu.cs.tweeter.view.asyncTasks;
 
-import android.util.Log;
+import android.os.AsyncTask;
 
 import java.io.IOException;
 
 import edu.byu.cs.tweeter.model.domain.User;
 import edu.byu.cs.tweeter.model.service.request.StatusRequest;
 import edu.byu.cs.tweeter.model.service.response.StatusResponse;
-import edu.byu.cs.tweeter.util.ByteArrayUtils;
+import edu.byu.cs.tweeter.presenter.StatusPresenter;
 
-public class StatusTask {
+public class StatusTask extends AsyncTask<StatusRequest, Void, StatusResponse> {
 
     private final StatusPresenter presenter;
     private final Observer observer;
@@ -31,7 +31,7 @@ public class StatusTask {
      * @param presenter the presenter this task should use to login.
      * @param observer the observer who wants to be notified when this task completes.
      */
-    public StatusTask(StatusPresenter presenter, LoginTask.Observer observer) {
+    public StatusTask(StatusPresenter presenter, Observer observer) {
         if(observer == null) {
             throw new NullPointerException();
         }
@@ -44,12 +44,7 @@ public class StatusTask {
     protected StatusResponse doInBackground(StatusRequest... StatusRequests) {
         StatusResponse statResponse = null;
 
-        try {
-            statResponse = presenter.postStatus(StatusRequests[0]);
-        } catch (IOException ex) {
-            exception = ex;
-        }
-
+        statResponse = presenter.postStatus(StatusRequests[0]);
         return statResponse;
     }
     
